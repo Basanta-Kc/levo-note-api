@@ -29,10 +29,17 @@ class ReminderUpdateSchema(Schema):
 
 class ReminderSchema(Schema):
     id = fields.UUID()
+    note_id = fields.UUID(required=True)
     email = fields.Str(required=True)
     date = fields.DateTime(required=True)
     created_at = fields.DateTime()
     updated_at = fields.DateTime()
+
+class ReminderCreateSchema(Schema):
+    note_id = fields.UUID(required=True)
+    email = fields.Str(required=True)
+    date = fields.DateTime(required=True)
+
 
 class NoteResponseSchema(Schema):
     id = fields.UUID()

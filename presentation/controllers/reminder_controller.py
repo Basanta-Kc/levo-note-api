@@ -1,7 +1,7 @@
 from flask_smorest import Blueprint
 from injector import inject
-from domain.schemas import ReminderSchema, ReminderIDSchema, PaginationSchema, ReminderUpdateSchema
-from flask import jsonify, current_app, request
+from domain.schemas import ReminderCreateSchema, ReminderSchema, ReminderIDSchema, PaginationSchema, ReminderUpdateSchema
+from flask import jsonify
 from application.services.reminder_services import ReminderService
 
 reminders_blp = Blueprint("reminders", "reminders", url_prefix="/reminders")
@@ -10,7 +10,6 @@ reminders_blp = Blueprint("reminders", "reminders", url_prefix="/reminders")
 @reminders_blp.arguments(PaginationSchema, location="query")
 @inject
 def get_reminders(args, reminder_service: ReminderService):
-    current_app.logger.debug(f"Received arguments: {args}")
     pagination_data = reminder_service.get_all_reminders(args.get('page'), args.get('limit'))
     return jsonify({
             'total': pagination_data['total'],
@@ -38,14 +37,15 @@ def get_reminder(id, reminder_service: ReminderService):
     })
 
 @reminders_blp.route("/", methods=["POST"])
-@reminders_blp.arguments(ReminderSchema)
+@reminders_blp.arguments(ReminderCreateSchema)
 @inject
 def create_reminder(data, reminder_service: ReminderService):
+    print('data', data)
     new_reminder = reminder_service.create_reminder(data)
     return jsonify({'message': 'Reminder created successfully!', 'reminder': {'id': new_reminder.id}}), 201
 
 @reminders_blp.route("/<uuid:id>", methods=["PUT"])
-@reminders_blp.arguments(ReminderSchema)
+@reminders_blp.arguments(ReminderUpdateSchema)
 @inject
 def update_reminder(data,id, reminder_service: ReminderService):
     reminder_service.update_reminder(id, data)

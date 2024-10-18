@@ -10,6 +10,12 @@ class Config:
     OPENAPI_VERSION = "3.0.2"
     LOGGING_LEVEL = os.environ.get('LOGGING_LEVEL', 'DEBUG')
     DEBUG = True
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USERNAME = 'devbasanta@gmail.com'
+    MAIL_PASSWORD = 'zune osac vkex ogfv'    
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
 
 
 class DevelopmentConfig(Config):
