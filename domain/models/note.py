@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
 import uuid
 from infrastructure.database import db
 
@@ -11,3 +11,8 @@ class Note(db.Model):
     description = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
+
+    reminder = relationship("Reminder", back_populates="note", uselist=False, cascade="all, delete-orphan")
+
+
+

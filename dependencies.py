@@ -1,6 +1,6 @@
 from injector import singleton
-from application.services import NoteService
-from infrastructure.repositories import NoteRepository
+from application.services.note_services import NoteService
+from infrastructure.repositories.note_repository import NoteRepository
 
 def configure(binder):
     binder.bind(

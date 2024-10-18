@@ -1,5 +1,5 @@
 from injector import inject
-from infrastructure.repositories import NoteRepository
+from infrastructure.repositories.note_repository import NoteRepository
 
 
 class NoteService:

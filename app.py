@@ -4,7 +4,8 @@ from flask_smorest import Api
 from dependencies import configure
 from infrastructure.database import db
 from flask_migrate import Migrate
-from presentation.controllers import notes_blp
+from presentation.controllers.note_controller import notes_blp
+from presentation.controllers.reminder_controller import reminders_blp
 from presentation.error_handlers import register_error_handlers
 
 import logging
@@ -25,10 +26,11 @@ app.logger.addHandler(handler)
 # Register blueprints and error handlers
 api = Api(app)
 api.register_blueprint(notes_blp)
+api.register_blueprint(reminders_blp)
 register_error_handlers(app)
 
 # Dependency injection configuration
 FlaskInjector(app=app, modules=[configure])
 
 if __name__ == '__main__':
-    app.run(debug=True, port=3000)
+    app.run(debug=True)
