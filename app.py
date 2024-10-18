@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_injector import FlaskInjector
+from flask_mail import Message
 from flask_smorest import Api
 from dependencies import configure
 from infrastructure.database import db
@@ -12,6 +13,8 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 from scheduler_config import initialize_scheduler
+
+
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
@@ -34,6 +37,7 @@ api = Api(app)
 api.register_blueprint(notes_blp)
 api.register_blueprint(reminders_blp)
 register_error_handlers(app)
+
 
 # Dependency injection configuration
 FlaskInjector(app=app, modules=[configure])

@@ -1,4 +1,7 @@
 # Reminder Service
+from flask_mail import Message
+from application.services.email_services import send_email
+from mail import mail
 from scheduler_config import scheduler
 from apscheduler.triggers.date import DateTrigger
 from injector import inject
@@ -22,8 +25,9 @@ class ReminderService:
         
     def create_reminder(self, data):
         reminder = self.reminder_repository.create_reminder(data)
+        send_email(reminder.email)
         scheduler.add_job(
-            func=self.print_reminder,
+            func=send_email,
             trigger=DateTrigger(run_date=reminder.date),
             id=str(reminder.id),
             args=[reminder.email],
