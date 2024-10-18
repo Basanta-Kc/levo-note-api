@@ -4,6 +4,15 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from marshmallow import ValidationError
 from datetime import datetime, timezone
+import logging
+from logging.handlers import RotatingFileHandler
+
+# Configure logging
+handler = RotatingFileHandler('error.log', maxBytes=100000, backupCount=1)
+handler.setLevel(logging.ERROR)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
 import uuid
 
 app = Flask(__name__)
@@ -12,6 +21,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["API_TITLE"] = "My API"
 app.config["API_VERSION"] = "v1"
 app.config["OPENAPI_VERSION"] = "3.0.2"
+
+# Add the handler to the app's logger
+app.logger.addHandler(handler)
 
 db = SQLAlchemy(app)
 api = Api(app)
@@ -50,12 +62,21 @@ class NoteIDSchema(Schema):
 def handle_validation_error(error):
     return jsonify(error.messages), 400
 
+@app.errorhandler(Exception)
+def internal_server_error(error):
+    print('reached here')
+    # Log the error details to the log file
+    app.logger.error('Server Error: %s', (error))
+    
+    # Return a generic error message to the client
+    return jsonify({'message': 'Something went wrong. Please try again later.'}), 500
+
 # Route to get all notes with query parameters validation
 @notes_blp.route("/")
 @notes_blp.arguments(PaginationSchema, location="query")
 def get_notes(args):
     """Retrieve all notes with pagination."""
-    page = args.get('page')
+    page = args.getS('page')
     limit = args.get('limit')
     notes = Note.query.paginate(page=page, per_page=limit).items
     return jsonify([{'id': note.id, 'title': note.title, 'description': note.description,
