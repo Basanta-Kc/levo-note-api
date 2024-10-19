@@ -9,15 +9,17 @@ from mail import mail
 from presentation.controllers.note_controller import notes_blp
 from presentation.controllers.reminder_controller import reminders_blp
 from presentation.error_handlers import register_error_handlers
+from flask_cors import CORS
 import logging
 from logging.handlers import RotatingFileHandler
-
 from scheduler_config import initialize_scheduler
 
 
-
-app = Flask(__name__)
+app = Flask(__name__, template_folder='presentation/templates')
 app.config.from_object('config.Config')
+
+# Enable CORS for the entire app
+CORS(app, origins='*')
 
 # Initialize database and migration
 db.init_app(app)

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Notification</title>
+    <style>
+        body {
+            background-color: #f2f4f6; /* Slightly darker gray background */
+            color: #333; /* Dark text color */
+            font-family: 'Arial', sans-serif; /* Font style */
+            padding: 40px; /* Padding around the body */
+            margin: 0; /* Reset default margin */
+        }
+        .container {
+            max-width: 600px; /* Maximum width of the container */
+            margin: auto; /* Center the container */
+            background-color: #ffffff; /* White background */
+            padding: 30px; /* Padding inside the container */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            border: 1px solid #e2e8f0; /* Light border */
+        }
+        h2 {
+            font-size: 26px; /* Larger heading size */
+            font-weight: bold; /* Bold font */
+            margin-bottom: 20px; /* Space below the heading */
+            color: #4a5568; /* Darker gray for heading */
+        }
+        p {
+            margin-bottom: 20px; /* Space below paragraphs */
+            line-height: 1.6; /* Increased line height for readability */
+            font-size: 16px; /* Font size for paragraphs */
+        }
+        strong {
+            font-weight: bold; /* Bold text for strong elements */
+            color: #2d3748; /* Darker text for strong elements */
+        }
+        .button {
+            display: inline-block; /* Block level element for button */
+            background-color: #1e90ff; /* Button color */
+            color: white; /* Button text color */
+            padding: 12px 24px; /* Padding inside the button */
+            border-radius: 8px; /* Rounded corners for button */
+            text-decoration: none; /* Remove underline from links */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition for hover */
+            font-weight: bold; /* Bold text for button */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Button shadow */
+        }
+        .button:hover {
+            background-color: #1c6ea4; /* Darker button color on hover */
+            transform: translateY(-2px); /* Lift effect on hover */
+        }
+        footer {
+            margin-top: 30px; /* Space above the footer */
+            font-size: 14px; /* Smaller font size for footer */
+            color: #666; /* Gray color for footer */
+            text-align: center; /* Centered text for footer */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Hello Dear,</h2>
+        <p>You have a new note available in <strong>Levo Note</strong>.</p>
+
+        <p><strong>Note Title:</strong> {{ note_title }}</p>
+
+        <p>Click the button below to view the note:</p>
+
+        <a href="http://localhost:5173?noteId={{ note_id }}" class="button">View Note</a>
+
+        <footer>
+            <p>Thank you for using Levo Note!</p>
+            <p>Best regards,<br>The Levo Note Team</p>
+        </footer>
+    </div>
+</body>
+</html>

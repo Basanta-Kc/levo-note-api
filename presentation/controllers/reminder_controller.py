@@ -4,7 +4,7 @@ from domain.schemas import ReminderCreateSchema, ReminderSchema, ReminderIDSchem
 from flask import jsonify
 from application.services.reminder_services import ReminderService
 
-reminders_blp = Blueprint("reminders", "reminders", url_prefix="/reminders")
+reminders_blp = Blueprint("reminders", "reminders", url_prefix="/api/reminders")
 
 @reminders_blp.route("/")
 @reminders_blp.arguments(PaginationSchema, location="query")

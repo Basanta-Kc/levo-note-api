@@ -1,10 +1,11 @@
 from injector import inject
 from infrastructure.repositories.note_repository import NoteRepository
+from infrastructure.repositories.reminder_repository import ReminderRepository
 
 
 class NoteService:
     @inject
-    def __init__(self, note_repository: NoteRepository):
+    def __init__(self, note_repository: NoteRepository, reminder_repository: ReminderRepository):
         self.note_repository = note_repository
 
     def get_all_notes(self, page, limit, search_query):
@@ -24,3 +25,5 @@ class NoteService:
     def delete_note(self, note_id):
         note = self.note_repository.get_note_by_id(note_id)
         self.note_repository.delete_note(note)
+        if note.reminder:
+            self.note_repository.delete_reminder(note.reminder) 
