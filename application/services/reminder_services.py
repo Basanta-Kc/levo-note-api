@@ -21,6 +21,16 @@ class ReminderService:
         return self.reminder_repository.get_reminder_by_id(reminder_id)
 
     def create_reminder(self, data):
+        """
+        Creates a new reminder and schedules an email to be sent to the specified email address 
+        at the specified date.
+
+        Args:
+            data (dict): A dictionary containing the reminder data.
+
+        Returns:
+            Reminder: The created reminder object.
+        """
         reminder = self.reminder_repository.create_reminder(data)
         scheduler.add_job(
             func=send_email,
@@ -31,7 +41,7 @@ class ReminderService:
                 "Levo Note Reminder",
                 render_template("email_template.html", note_id=reminder.note.id),
             ],
-            replace_existing=True,  # Replace if job already exists
+            replace_existing=True,  
         )
         return reminder
 
@@ -55,7 +65,7 @@ class ReminderService:
                     "Levo Note Reminder",
                     render_template("email_template.html", note_id=reminder.note.id),
                 ],
-                replace_existing=True,  # Replace if job already exists
+                replace_existing=True, 
             )
         return updatedReminder
 

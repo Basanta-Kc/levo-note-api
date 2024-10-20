@@ -25,6 +25,15 @@ class NoteService:
         return self.note_repository.update_note(note, data)
 
     def delete_note(self, note_id):
+        """
+        Deletes a note and its associated reminder, if any.
+
+        Args:
+            note_id (UUID): The ID of the note to be deleted.
+
+        This method first retrieves the note by its ID. If the note has an associated
+        reminder, the reminder is also deleted. The note is then removed from the database.
+        """
         note = self.note_repository.get_note_by_id(note_id)
         self.note_repository.delete_note(note)
         if note.reminder:
