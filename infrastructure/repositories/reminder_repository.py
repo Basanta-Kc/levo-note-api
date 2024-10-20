@@ -1,15 +1,13 @@
 from domain import Reminder
 from infrastructure.database import db
 
+
 class ReminderRepository:
     def get_all_reminders(self, page, limit):
         # Get paginated reminders
         pagination = Reminder.query.paginate(page=page, per_page=limit)
-        
-        return {
-            'total': pagination.total,
-            'items': pagination.items
-        }
+
+        return {"total": pagination.total, "items": pagination.items}
 
     def get_reminder_by_id(self, reminder_id):
         return Reminder.query.get_or_404(reminder_id)
@@ -21,9 +19,9 @@ class ReminderRepository:
         return new_reminder
 
     def update_reminder(self, reminder, data):
-        reminder.note_id = data.get('note_id', reminder.note_id)
-        reminder.email = data.get('email', reminder.email)
-        reminder.date = data.get('date', reminder.date)
+        reminder.note_id = data.get("note_id", reminder.note_id)
+        reminder.email = data.get("email", reminder.email)
+        reminder.date = data.get("date", reminder.date)
         db.session.commit()
         return reminder
 

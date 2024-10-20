@@ -2,12 +2,14 @@ from sqlalchemy import Column, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 import uuid
 from datetime import datetime
-from infrastructure.database import db  
+from infrastructure.database import db
+
+
 class Reminder(db.Model):
-    __tablename__ = 'reminder'
+    __tablename__ = "reminder"
 
     id = db.Column(db.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    note_id = Column(db.UUID(as_uuid=True), ForeignKey('note.id'), nullable=False)
+    note_id = Column(db.UUID(as_uuid=True), ForeignKey("note.id"), nullable=False)
     email = Column(String(255), nullable=False)
     date = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)

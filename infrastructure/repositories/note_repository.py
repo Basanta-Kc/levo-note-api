@@ -1,6 +1,7 @@
 from domain import Note
 from infrastructure.database import db
 
+
 class NoteRepository:
     def get_all_notes(self, page, limit, search_query=None):
         query = Note.query
@@ -8,11 +9,11 @@ class NoteRepository:
         # Apply search filter if provided
         if search_query:
             query = query.filter(
-                Note.title.ilike(f'%{search_query}%') | Note.description.ilike(f'%{search_query}%')
+                Note.title.ilike(f"%{search_query}%")
+                | Note.description.ilike(f"%{search_query}%")
             )
-            
-        query = query.order_by(Note.created_at.asc())
 
+        query = query.order_by(Note.created_at.asc())
 
         query = query.options(db.joinedload(Note.reminder))
 
@@ -20,8 +21,8 @@ class NoteRepository:
         pagination = query.paginate(page=page, per_page=limit)
 
         return {
-            'total': pagination.total,
-            'items': pagination.items  # Return notes with reminders
+            "total": pagination.total,
+            "items": pagination.items,  # Return notes with reminders
         }
 
     def get_note_by_id(self, note_id):
@@ -34,8 +35,8 @@ class NoteRepository:
         return new_note
 
     def update_note(self, note, data):
-        note.title = data.get('title', note.title)
-        note.description = data.get('description', note.description)
+        note.title = data.get("title", note.title)
+        note.description = data.get("description", note.description)
         db.session.commit()
         return note
 

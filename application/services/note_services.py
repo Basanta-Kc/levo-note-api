@@ -5,7 +5,9 @@ from infrastructure import ReminderRepository
 
 class NoteService:
     @inject
-    def __init__(self, note_repository: NoteRepository, reminder_repository: ReminderRepository):
+    def __init__(
+        self, note_repository: NoteRepository, reminder_repository: ReminderRepository
+    ):
         self.note_repository = note_repository
         self.reminder_repository = reminder_repository
 
@@ -26,4 +28,4 @@ class NoteService:
         note = self.note_repository.get_note_by_id(note_id)
         self.note_repository.delete_note(note)
         if note.reminder:
-            self.reminder_repository.delete_reminder(note.reminder) 
+            self.reminder_repository.delete_reminder(note.reminder)

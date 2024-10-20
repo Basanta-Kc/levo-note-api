@@ -8,6 +8,7 @@ from apscheduler.triggers.date import DateTrigger
 from injector import inject
 from infrastructure.repositories.reminder_repository import ReminderRepository
 
+
 class ReminderService:
     @inject
     def __init__(self, reminder_repository: ReminderRepository):
@@ -18,15 +19,19 @@ class ReminderService:
 
     def get_reminder_by_id(self, reminder_id):
         return self.reminder_repository.get_reminder_by_id(reminder_id)
-        
+
     def create_reminder(self, data):
         reminder = self.reminder_repository.create_reminder(data)
         scheduler.add_job(
             func=send_email,
             trigger=DateTrigger(run_date=reminder.date),
             id=str(reminder.id),
-            args=[reminder.email, 'Levo Note Reminder', render_template('email_template.html', note_id=reminder.note.id)],
-            replace_existing=True  # Replace if job already exists
+            args=[
+                reminder.email,
+                "Levo Note Reminder",
+                render_template("email_template.html", note_id=reminder.note.id),
+            ],
+            replace_existing=True,  # Replace if job already exists
         )
         return reminder
 
@@ -38,16 +43,20 @@ class ReminderService:
         if job:
             scheduler.reschedule_job(
                 job_id=str(reminder.id),
-                trigger=DateTrigger(run_date=updatedReminder.date),               
+                trigger=DateTrigger(run_date=updatedReminder.date),
             )
         else:
             scheduler.add_job(
-                    func=send_email,
-                    trigger=DateTrigger(run_date=updatedReminder.date),
-                    id=str(reminder_id),
-                    args=[reminder.email, 'Levo Note Reminder', render_template('email_template.html', note_id=reminder.note.id)],
-                    replace_existing=True  # Replace if job already exists
-                )
+                func=send_email,
+                trigger=DateTrigger(run_date=updatedReminder.date),
+                id=str(reminder_id),
+                args=[
+                    reminder.email,
+                    "Levo Note Reminder",
+                    render_template("email_template.html", note_id=reminder.note.id),
+                ],
+                replace_existing=True,  # Replace if job already exists
+            )
         return updatedReminder
 
     def delete_reminder(self, reminder_id):

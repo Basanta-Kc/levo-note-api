@@ -15,23 +15,23 @@ from scheduler_config import initialize_scheduler
 # Load environment variables from .env file
 load_dotenv()
 
-app = Flask(__name__, template_folder='presentation/templates')
-app.config.from_object('config.Config')
+app = Flask(__name__, template_folder="presentation/templates")
+app.config.from_object("config.Config")
 
 # Enable CORS for the entire app
-CORS(app, origins='*')
+CORS(app, origins="*")
 
 # Initialize database and migration
 db.init_app(app)
-migrate = Migrate(app, db, directory='infrastructure/migrations') 
+migrate = Migrate(app, db, directory="infrastructure/migrations")
 
 # Set up logging
-handler = RotatingFileHandler('error.log', maxBytes=100000, backupCount=1)
+handler = RotatingFileHandler("error.log", maxBytes=100000, backupCount=1)
 handler.setLevel(logging.ERROR)
 app.logger.addHandler(handler)
 
 # Set up email
-mail.init_app(app)  
+mail.init_app(app)
 
 # Register blueprints and error handlers
 api = Api(app)
@@ -44,6 +44,6 @@ register_error_handlers(app)
 # Dependency injection configuration
 FlaskInjector(app=app, modules=[configure])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     initialize_scheduler()
     app.run(port=8000)
