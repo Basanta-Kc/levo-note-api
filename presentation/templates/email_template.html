@@ -68,7 +68,7 @@
 
         <p>Click the button below to view the note:</p>
 
-        <a href="http://localhost:5173?noteId={{ note_id }}" class="button">View Note</a>
+        <a href="{{ 'APP_URL'|getenv }}?noteId={{ note_id }}" class="button">View Note</a>
 
         <footer>
             <p>Thank you for using Levo Note!</p>

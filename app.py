@@ -1,3 +1,4 @@
+import os
 from dotenv import load_dotenv
 from flask import Flask
 from flask_injector import FlaskInjector
@@ -17,6 +18,11 @@ load_dotenv()
 
 app = Flask(__name__, template_folder="presentation/templates")
 app.config.from_object("config.Config")
+
+# Custom filter to get environment variables
+@app.template_filter('getenv')
+def getenv_filter(key, default_value=None):
+    return os.getenv(key, default_value)
 
 # Enable CORS for the entire app
 CORS(app, origins="*")
