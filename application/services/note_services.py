@@ -1,6 +1,6 @@
 from injector import inject
-from infrastructure.repositories.note_repository import NoteRepository
-from infrastructure.repositories.reminder_repository import ReminderRepository
+from infrastructure import NoteRepository
+from infrastructure import ReminderRepository
 
 
 class NoteService:
@@ -16,7 +16,6 @@ class NoteService:
         return self.note_repository.get_note_by_id(note_id)
 
     def create_note(self, data):
-        print(data)
         return self.note_repository.create_note(data)
 
     def update_note(self, note_id, data):

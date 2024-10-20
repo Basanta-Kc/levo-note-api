@@ -1,7 +1,7 @@
-from flask_smorest import Blueprint, abort
+from flask_smorest import Blueprint
 from injector import inject
-from domain.schemas import NoteResponseSchema, NoteSchema, NoteIDSchema, PaginationResponseSchema, PaginationSchema
 from application.services.note_services import NoteService
+from domain.schemas import NoteResponseSchema, NoteSchema, PaginationResponseSchema, PaginationSchema
 
 notes_blp = Blueprint("notes", "notes", url_prefix="/api/notes")
 

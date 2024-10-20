@@ -1,6 +1,5 @@
-from flask import jsonify
-from domain.models.note import Note, db
-from domain.models.reminder import Reminder
+from domain import Note
+from infrastructure.database import db
 
 class NoteRepository:
     def get_all_notes(self, page, limit, search_query=None):

@@ -33,21 +33,14 @@ class ReminderService:
     def update_reminder(self, reminder_id, data):
         reminder = self.reminder_repository.get_reminder_by_id(reminder_id)
         updatedReminder = self.reminder_repository.update_reminder(reminder, data)
-        # Remove existing job and add new one
-        # since modiying_job didn't work as expected
+
         job = scheduler.get_job(str(reminder.id))
-        print(job)
         if job:
-            scheduler.remove_job(str(reminder.id))
-            scheduler.add_job(
-                func=send_email,
-                trigger=DateTrigger(run_date=updatedReminder.date),
-                id=str(reminder_id),
-                args=[reminder.email, 'Levo Note Reminder', render_template('email_template.html', note_id=reminder.note.id)],
-                replace_existing=True  # Replace if job already exists
+            scheduler.reschedule_job(
+                job_id=str(reminder.id),
+                trigger=DateTrigger(run_date=updatedReminder.date),               
             )
         else:
-            print('adding new job for reminder', reminder_id)
             scheduler.add_job(
                     func=send_email,
                     trigger=DateTrigger(run_date=updatedReminder.date),

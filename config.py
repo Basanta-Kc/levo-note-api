@@ -1,34 +1,27 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Config:
-    """Base configuration class."""
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'your_default_secret_key')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'postgresql://postgres:password@localhost:5435/notedb')
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    API_TITLE = "My API"
-    API_VERSION = "v1"
-    OPENAPI_VERSION = "3.0.2"
-    LOGGING_LEVEL = os.environ.get('LOGGING_LEVEL', 'DEBUG')
-    DEBUG = True
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 587
-    MAIL_USERNAME = 'devbasanta@gmail.com'
-    MAIL_PASSWORD = 'zune osac vkex ogfv'    
-    MAIL_USE_TLS = True
-    MAIL_USE_SSL = False
+    # Database configuration
+    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
+
+    # API configuration
+    API_TITLE = os.getenv('API_TITLE')
+    API_VERSION = os.getenv('API_VERSION')
+    OPENAPI_VERSION = os.getenv('OPENAPI_VERSION')
+
+    # Logging and Debugging
+    LOGGING_LEVEL = os.getenv('LOGGING_LEVEL')
+    DEBUG = os.getenv('DEBUG').lower() == 'true'
+    
+    # Email settings
+    MAIL_SERVER = os.getenv('MAIL_SERVER')
+    MAIL_PORT = int(os.getenv('MAIL_PORT'))
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
+    MAIL_USE_TLS = os.getenv('MAIL_USE_TLS').lower() == 'true'
+    MAIL_USE_SSL = os.getenv('MAIL_USE_SSL').lower() == 'true'
 
 
-class DevelopmentConfig(Config):
-    """Development configuration class."""
-    DEBUG = True
-
-
-class TestingConfig(Config):
-    """Testing configuration class."""
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL', 'postgresql://postgres:password@localhost:5435/test_notedb')
-
-
-class ProductionConfig(Config):
-    """Production configuration class."""
-    DEBUG = False

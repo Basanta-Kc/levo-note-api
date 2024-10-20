@@ -1,5 +1,5 @@
-# Reminder Repository
-from domain.models.reminder import Reminder, db
+from domain import Reminder
+from infrastructure.database import db
 
 class ReminderRepository:
     def get_all_reminders(self, page, limit):
