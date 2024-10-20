@@ -28,15 +28,13 @@ def create_note(data, note_service: NoteService):
     return {'message': 'Note created successfully!', 'note': {'id': new_note.id}}  
 @notes_blp.route("/<uuid:id>", methods=["PUT"])
 @notes_blp.arguments(NoteSchema)
-@notes_blp.response(200)  
 @inject
 def update_note(data, id, note_service: NoteService):
     note_service.update_note(id, data)
     return {'message': 'Note updated successfully!'}  
 
 @notes_blp.route("/<uuid:id>", methods=["DELETE"])
-@notes_blp.response(200)  
 @inject
 def delete_note(id, note_service: NoteService):
     note_service.delete_note(id)
-    return {'message': 'Note updated successfully!'}  
+    return {'message': 'Note deleted successfully!'}  

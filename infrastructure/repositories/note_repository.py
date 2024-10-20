@@ -10,7 +10,10 @@ class NoteRepository:
         if search_query:
             query = query.filter(
                 Note.title.ilike(f'%{search_query}%') | Note.description.ilike(f'%{search_query}%')
-            ).order_by(Note.created_at.desc())
+            )
+            
+        query = query.order_by(Note.created_at.asc())
+
 
         query = query.options(db.joinedload(Note.reminder))
 

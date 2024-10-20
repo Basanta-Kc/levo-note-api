@@ -1,58 +1,46 @@
 from flask_smorest import Blueprint
 from injector import inject
-from domain.schemas import ReminderCreateSchema, ReminderSchema, ReminderIDSchema, PaginationSchema, ReminderUpdateSchema
-from flask import jsonify
+from domain.schemas import ReminderCreateSchema, ReminderSchema, PaginationSchema, ReminderUpdateSchema
 from application.services.reminder_services import ReminderService
 
 reminders_blp = Blueprint("reminders", "reminders", url_prefix="/api/reminders")
 
+# Get all reminders with pagination
 @reminders_blp.route("/")
 @reminders_blp.arguments(PaginationSchema, location="query")
 @inject
 def get_reminders(args, reminder_service: ReminderService):
     pagination_data = reminder_service.get_all_reminders(args.get('page'), args.get('limit'))
-    return jsonify({
-            'total': pagination_data['total'],
-            'items': [{
-                'id': reminder.id,
-                'note_id': reminder.note_id,
-                'email': reminder.email,
-                'date': reminder.date.isoformat(),  # Convert to ISO format
-                'created_at': reminder.created_at.isoformat(),
-                'updated_at': reminder.updated_at.isoformat()
-            } for reminder in pagination_data['items']]
-        })
+    return pagination_data
 
+# Get a single reminder by id
 @reminders_blp.route("/<uuid:id>")
+@reminders_blp.response(200, ReminderSchema)  # Define the response schema
 @inject
 def get_reminder(id, reminder_service: ReminderService):
     reminder = reminder_service.get_reminder_by_id(id)
-    return jsonify({
-        'id': reminder.id,
-        'note_id': reminder.note_id,
-        'email': reminder.email,
-        'date': reminder.date.isoformat(),
-        'created_at': reminder.created_at.isoformat(),
-        'updated_at': reminder.updated_at.isoformat()
-    })
+    return reminder
 
+# Create a new reminder
 @reminders_blp.route("/", methods=["POST"])
 @reminders_blp.arguments(ReminderCreateSchema)
+@reminders_blp.response(201)  # Define the response schema
 @inject
 def create_reminder(data, reminder_service: ReminderService):
-    print('data', data)
     new_reminder = reminder_service.create_reminder(data)
-    return jsonify({'message': 'Reminder created successfully!', 'reminder': {'id': new_reminder.id}}), 201
+    return {'message': 'Reminder created successfully!', 'id': new_reminder.id}
 
+# Update an existing reminder
 @reminders_blp.route("/<uuid:id>", methods=["PUT"])
 @reminders_blp.arguments(ReminderUpdateSchema)
 @inject
-def update_reminder(data,id, reminder_service: ReminderService):
+def update_reminder(data, id, reminder_service: ReminderService):
     reminder_service.update_reminder(id, data)
-    return jsonify({'message': 'Reminder updated successfully!'})
+    return {'message': 'Reminder updated successfully!'}
 
+# Delete a reminder
 @reminders_blp.route("/<uuid:id>", methods=["DELETE"])
 @inject
 def delete_reminder(id, reminder_service: ReminderService):
     reminder_service.delete_reminder(id)
-    return jsonify({'message': 'Reminder deleted successfully!'})
+    return {'message': 'Reminder deleted successfully!', 'id': id}
